@@ -16,7 +16,7 @@ namespace my_new_app.Repositories
       connectionString = _configuration.GetConnectionString("DefaultConnection");
     }
 
-    public void Insert(Note note)
+    public int Insert(Note note)
     {
         using (SqlConnection cnn = new SqlConnection(connectionString))
         {
@@ -28,8 +28,9 @@ namespace my_new_app.Repositories
                 {
                     cnn.Open();
                 }
-                cmd.ExecuteNonQuery();
+                Int32 newId = (Int32) cmd.ExecuteScalar();
                 cnn.Close();
+                return newId;
             }
         }
     }

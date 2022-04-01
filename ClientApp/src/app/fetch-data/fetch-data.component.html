@@ -2,15 +2,11 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 <p *ngIf="!notes"><em>Loading...</em></p>
-<form class="d-flex">
-  <input type="text" placeholder="Enter a Note" />
-  <input type="submit" class="btn btn-primary btn-sm" />
-</form>
-<br />
-<form class="d-flex">
-  <input type="text" placeholder="Search by Id"/>
-  <input type="submit" class="btn btn-primary btn-sm" />
-</form>
+
+  <input type="text" [(ngModel)]="noteName" placeholder="Search by Id or Add a Note"/>
+  <button type="button" class="btn btn-primary btn-sm" (click)="add(noteName)">Add Note</button>
+  <button type="button" class="btn btn-primary btn-sm" (click)="search(noteName)">Search By Id</button>
+
 
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="notes">
   <thead>
@@ -26,9 +22,14 @@
 
     <tr *ngFor="let note of notes">
       <td>{{ note.noteId }}</td>
-      <td>{{ note.content }}</td>
-      <td><button class="btn btn-warning">Edit</button></td>
-      <td><button class="btn btn-danger">Delete</button></td>
+      <td>
+        <span *ngIf="editNote!==note; else editInput" class="name">{{ note.content }}</span>
+        <ng-template #editInput>
+          <input #noteEditInput type="text" class="name" [value]="editNote!.content" (blur)="edit(noteEditInput.value)" (keydown.enter)="edit(noteEditInput.value)"/>
+        </ng-template>
+      </td>
+      <td><button class="btn btn-warning" *ngIf="editNote!==note;" (click)="editNote = note;">Edit</button></td>
+      <td><button class="btn btn-danger" (click)="delete(note)">Delete</button></td>
     </tr>
   </tbody>
 </table>

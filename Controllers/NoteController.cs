@@ -31,9 +31,9 @@ namespace my_new_app.Controllers
 
         // POST Note
         [HttpPost]
-        public void Post(Note note)
+        public int Post(Note note)
         {
-            _repository.Insert(note);
+            return _repository.Insert(note);
         }
 
         // PUT Note/5

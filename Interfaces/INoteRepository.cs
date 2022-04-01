@@ -4,7 +4,7 @@ namespace my_new_app.Interfaces
 {
   public interface INoteRepository
   {
-        void Insert(Note note);
+        int Insert(Note note);
         IEnumerable<Note> GetNotes();
         Note GetNoteById(int? id);
         void UpdateNoteById(int? id, Note note);
