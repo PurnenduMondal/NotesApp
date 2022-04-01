@@ -1,0 +1,34 @@
+<h1 id="tableLabel">All Notes</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+<p *ngIf="!notes"><em>Loading...</em></p>
+<form class="d-flex">
+  <input type="text" placeholder="Enter a Note" />
+  <input type="submit" class="btn btn-primary btn-sm" />
+</form>
+<br />
+<form class="d-flex">
+  <input type="text" placeholder="Search by Id"/>
+  <input type="submit" class="btn btn-primary btn-sm" />
+</form>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="notes">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Note</th>
+      <th>Edit</th>
+      <th>Delete</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr *ngFor="let note of notes">
+      <td>{{ note.noteId }}</td>
+      <td>{{ note.content }}</td>
+      <td><button class="btn btn-warning">Edit</button></td>
+      <td><button class="btn btn-danger">Delete</button></td>
+    </tr>
+  </tbody>
+</table>
