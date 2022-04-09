@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 
 import { Note } from './note';
 
@@ -23,10 +22,10 @@ export class NotesService {
     return this.http.get<Note[]>(this.notesUrl)
   }
 
-  searchNotes(term: string): Observable<Note> {
-    term = term.trim();
+  searchNotes(id: string): Observable<Note> {
+    id = id.trim();
 
-    const url = `${this.notesUrl}/${term}`;
+    const url = `${this.notesUrl}/${id}`;
     console.log(url)
     return this.http.get<Note>(url)
   }
@@ -41,10 +40,10 @@ export class NotesService {
     return this.http.delete(url, httpOptions)
   }
 
-  updateNote(id:number, note: Note): Observable<unknown> {
+  updateNote(note: Note): Observable<unknown> {
     httpOptions.headers =
       httpOptions.headers.set('Authorization', 'my-new-auth-token');
 
-    return this.http.put(`${this.notesUrl}/${id}`, note, httpOptions)
+    return this.http.put(`${this.notesUrl}/${note.noteId}`, note, httpOptions)
   }
 }

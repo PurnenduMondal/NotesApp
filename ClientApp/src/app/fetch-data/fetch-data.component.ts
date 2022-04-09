@@ -10,7 +10,7 @@ import { NotesService } from './notes.service';
 export class FetchDataComponent implements OnInit {
   public notes: Note[] = [];
   editNote: Note | undefined;
-  noteName = '';
+  noteContent = '';
 
   constructor(private notesService: NotesService) {}
 
@@ -24,7 +24,7 @@ export class FetchDataComponent implements OnInit {
   }
 
   add(content: string): void {
-    this.editNote = undefined;
+    
     content = content.trim();
     if (!content) {
       return;
@@ -32,7 +32,7 @@ export class FetchDataComponent implements OnInit {
     const newNote: Note = { content } as Note;
     this.notesService
       .addNote(newNote)
-      .subscribe(noteId => {this.notes.push({ noteId, content } as Note);console.log(noteId)});
+      .subscribe(noteId => this.notes.push({ noteId, content } as Note));
   }
 
   delete(note: Note): void {
@@ -42,13 +42,13 @@ export class FetchDataComponent implements OnInit {
       .subscribe();
   }
 
-  edit(noteName: string) {
-    this.update(noteName);
-    this.editNote = undefined;
+  edit(noteContent: string) {
+    this.update(noteContent);
+    
   }
 
   search(searchTerm: string) {
-    this.editNote = undefined;
+    
     if (searchTerm) {
       this.notesService
         .searchNotes(searchTerm)
@@ -66,7 +66,7 @@ export class FetchDataComponent implements OnInit {
         this.notes[indexOfNote] = { noteId, content } as Note;
       }
       this.notesService
-        .updateNote(this.editNote.noteId, { noteId, content } as Note)
+        .updateNote({ noteId, content } as Note)
         .subscribe();
       this.editNote = undefined;
     }

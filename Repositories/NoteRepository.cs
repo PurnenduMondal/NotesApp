@@ -18,27 +18,27 @@ namespace my_new_app.Repositories
 
     public int Insert(Note note)
     {
-        using (SqlConnection cnn = new SqlConnection(connectionString))
+      using (SqlConnection cnn = new SqlConnection(connectionString))
+      {
+        using (SqlCommand cmd = new SqlCommand("InsertNote", cnn))
         {
-            using (SqlCommand cmd = new SqlCommand("InsertNote", cnn))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Content", note.Content); 
-                if (cnn.State == ConnectionState.Closed)
-                {
-                    cnn.Open();
-                }
-                Int32 newId = (Int32) cmd.ExecuteScalar();
-                cnn.Close();
-                return newId;
-            }
+          cmd.CommandType = CommandType.StoredProcedure;
+          cmd.Parameters.AddWithValue("@Content", note.Content);
+          if (cnn.State == ConnectionState.Closed)
+          {
+            cnn.Open();
+          }
+          Int32 newId = (Int32)cmd.ExecuteScalar();
+          cnn.Close();
+          return newId;
         }
+      }
     }
 
     public IEnumerable<Note> GetNotes()
     {
       List<Note> notes = new();
-      
+
       using (SqlConnection cnn = new SqlConnection(connectionString))
       {
         using (SqlCommand cmd = new SqlCommand("GetAllNotes", cnn))
@@ -54,8 +54,8 @@ namespace my_new_app.Repositories
             {
               notes.Add(new Note()
               {
-                  NoteId = Convert.ToInt32(reader["NoteId"]),
-                  Content = reader["Content"].ToString()
+                NoteId = Convert.ToInt32(reader["NoteId"]),
+                Content = reader["Content"].ToString()
               });
             }
             return notes;
@@ -65,68 +65,68 @@ namespace my_new_app.Repositories
     }
     public Note GetNoteById(int? id)
     {
-        Note note = new();
+      Note note = new();
 
-        using (SqlConnection cnn = new SqlConnection(connectionString))
+      using (SqlConnection cnn = new SqlConnection(connectionString))
+      {
+        using (SqlCommand cmd = new SqlCommand("GetNoteById", cnn))
         {
-            using (SqlCommand cmd = new SqlCommand("GetNoteById", cnn))
+          cmd.CommandType = CommandType.StoredProcedure;
+          cmd.Parameters.AddWithValue("@NoteId", id);
+
+          if (cnn.State == ConnectionState.Closed)
+          {
+            cnn.Open();
+          }
+
+          using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+          {
+            while (reader.Read())
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@NoteId", id);
-                
-                if (cnn.State == ConnectionState.Closed)
-                {
-                    cnn.Open();
-                }
-                
-                using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
-                {
-                    while (reader.Read())
-                    {
-                        note.NoteId = Convert.ToInt32(reader["NoteId"]);
-                        note.Content = reader["Content"].ToString();
-                    }
-                    return note;
-                }
+              note.NoteId = Convert.ToInt32(reader["NoteId"]);
+              note.Content = reader["Content"].ToString();
             }
+            return note;
+          }
         }
+      }
     }
 
     public void UpdateNoteById(int? id, Note note)
     {
-        using (SqlConnection cnn = new SqlConnection(connectionString))
+      using (SqlConnection cnn = new SqlConnection(connectionString))
+      {
+        using (SqlCommand cmd = new SqlCommand("UpdateNoteById", cnn))
         {
-            using (SqlCommand cmd = new SqlCommand("UpdateNoteById", cnn))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@NoteId", id);
-                cmd.Parameters.AddWithValue("@Content", note.Content);
-                if (cnn.State == ConnectionState.Closed)
-                {
-                    cnn.Open();
-                }
-                cmd.ExecuteNonQuery();
-                cnn.Close();
-            }
+          cmd.CommandType = CommandType.StoredProcedure;
+          cmd.Parameters.AddWithValue("@NoteId", id);
+          cmd.Parameters.AddWithValue("@Content", note.Content);
+          if (cnn.State == ConnectionState.Closed)
+          {
+            cnn.Open();
+          }
+          cmd.ExecuteNonQuery();
+          cnn.Close();
         }
+      }
     }
     public void DeleteNote(int? id)
     {
-        using (SqlConnection cnn = new SqlConnection(connectionString))
+      using (SqlConnection cnn = new SqlConnection(connectionString))
+      {
+        using (SqlCommand cmd = new SqlCommand("DeleteNoteById", cnn))
         {
-            using (SqlCommand cmd = new SqlCommand("DeleteNoteById", cnn))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@NoteId", id);
-                if (cnn.State == ConnectionState.Closed)
-                {
-                    cnn.Open();
-                }
-                
-                cmd.ExecuteNonQuery();
-                cnn.Close();
-            }
+          cmd.CommandType = CommandType.StoredProcedure;
+          cmd.Parameters.AddWithValue("@NoteId", id);
+          if (cnn.State == ConnectionState.Closed)
+          {
+            cnn.Open();
+          }
+
+          cmd.ExecuteNonQuery();
+          cnn.Close();
         }
+      }
     }
-    }
+  }
 }

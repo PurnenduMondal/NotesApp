@@ -3,9 +3,9 @@
 <p>This component demonstrates fetching data from the server.</p>
 <p *ngIf="!notes"><em>Loading...</em></p>
 
-  <input type="text" [(ngModel)]="noteName" placeholder="Search by Id or Add a Note"/>
-  <button type="button" class="btn btn-primary btn-sm" (click)="add(noteName)">Add Note</button>
-  <button type="button" class="btn btn-primary btn-sm" (click)="search(noteName)">Search By Id</button>
+  <input type="text" [(ngModel)]="noteContent" placeholder="Search by Id or Add a Note"/>
+  <button type="button" class="btn btn-success btn-sm" (click)="add(noteContent)">Add Note</button>
+  <button type="button" class="btn btn-info btn-sm" (click)="search(noteContent)">Search By Id</button>
 
 
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="notes">

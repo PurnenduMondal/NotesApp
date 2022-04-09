@@ -3,19 +3,18 @@ using my_new_app.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 const string CORS_POLICY = "CorsPolicy";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: CORS_POLICY,
-                      builder =>
-                      {
-                          builder.WithOrigins("https://localhost:44458")
-                          .AllowAnyMethod()
-                          .AllowAnyHeader();
-                      });
-});
+    options.AddPolicy(name: CORS_POLICY, builder => 
 
-// Add services to the container.
+        builder
+        .WithOrigins("https://localhost:44458")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+    );
+});
 
 builder.Services.AddControllersWithViews();
 
@@ -42,8 +41,9 @@ app.UseCors(CORS_POLICY);
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
+    pattern: "{controller}/{action=Index}/{id?}"
+);
 
-app.MapFallbackToFile("index.html");;
+app.MapFallbackToFile("index.html");
 
 app.Run();
